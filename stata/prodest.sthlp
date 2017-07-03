@@ -314,7 +314,7 @@ where c_i,t are the addends of this linear combination. The residuals r_i,t are 
 	
 {cmd:v)}
 {pstd}Previous lags of free and state variables are potentially valid instruments in a Wooldridge-type estimation framework. However, adding instruments in such context would lead to a reduced sample size, and this could be problematic given the "large N, small T" nature of most dataset used in the related literature.
-Introducing dynamic panel instruments à la Blundell-Bond is a solution to the issue: this allows to exploit the additional information in the lagged instruments without losing observations and estimation power. Defining the residual function matrix as:
+Introducing dynamic panel instruments Ã  la Blundell-Bond is a solution to the issue: this allows to exploit the additional information in the lagged instruments without losing observations and estimation power. Defining the residual function matrix as:
 			 															
 			y_i,2 - alpha - w_i,2*beta - x_i,2*gamma - g(x_i,2 , p_i,2)		
 			y_i,2 - alpha - w_i,2*beta - x_i,1*gamma - f[g(x_i,1 , p_i,1)]	
