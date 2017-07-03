@@ -1,0 +1,17 @@
+citHeader("To cite package 'prodest' in publications use:")
+
+citEntry(entry="Manual",
+         title = "prodest: Production Function Estimation",
+         author = personList(person(given="Gabriele", family="Rovigatti")),
+         year = "2017",
+         note = "R package version 0.1.1",
+         textVersion = "Rovigatti, G. (2017). prodest: Production Function Estimation in R. R package.")
+        
+
+
+citEntry(entry="Article",
+         title = "Production Function Estimation in R: The prodest Package",
+         author = personList(person(given="Gabriele", family="Rovigatti")),
+         year = "2017",
+         journal = "Working paper",
+         textVersion = "Rovigatti, G. (2017). Production Function Estimation in R: The prodest Package. Working paper.")

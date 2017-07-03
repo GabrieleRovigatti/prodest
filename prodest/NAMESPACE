@@ -1,0 +1,10 @@
+exportPattern("^[[:alpha:]]+")
+import("DEoptim")
+import("Rsolnp")
+import("dplyr")
+importFrom("parallel", "clusterEvalQ", "parLapply")
+importFrom("Matrix", "bdiag")
+importFrom("methods", "new")
+importFrom("stats", "fitted", "lm", "model.frame", "model.matrix",
+     "na.exclude", "optim", "resid", "rnorm", "runif", "sd",
+     "var")
