@@ -1,12 +1,6 @@
 # prodest
 Production Function Estimation in R
 
-#[![CRAN](http://www.r-pkg.org/badges/version/GAS)](https://cran.r-project.org/package=GAS) 
-#[![Downloads](http://cranlogs.r-pkg.org/badges/GAS?color=brightgreen)](http://www.r-pkg.org/pkg/GAS)
-#[![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/GAS?color=brightgreen)](http://www.r-pkg.org/pkg/GAS)
-#[![Pending Pull-Requests](http://githubbadges.herokuapp.com/LeopoldoCatania/GAS/pulls.svg?style=flat)](https://github.com/LeopoldoCatania/GAS/pulls)
-#[![Github Issues](http://githubbadges.herokuapp.com/LeopoldoCatania/GAS/issues.svg)](https://github.com/LeopoldoCatania/GAS/issues)
-
 `prodest` ([Rovigatti, 2017](https://CRAN.R-project.org/package=prodest)) implements most of the methods for production function estimation. The prodest package provides 
 functions to simulate panel data,
 estimate the productivity, state and free variables parameters. Full description of the models, their issues and characteristics
