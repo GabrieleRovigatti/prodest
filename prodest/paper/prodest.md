@@ -18,7 +18,9 @@ bibliography: prodest.bib
 
 # Summary
 
-Package prodest provides functions for Total Factor Productivity (TFP) estimation following the most widely-known methodologies using the 
+The Total Factor Productivity (TFP) - also called Multi-factor productivity - measures the change in output that cannot be accounted for 
+by changes in the amounts of input.
+The R package prodest provides functions for TFP estimation following the most widely-known methodologies using the 
 control function approach. Focusing on Value Added production functions, it estimates the two--steps models presented by Olley--Pakes 
 (1996) [@olley_etal96] and Levinshon--Petrin (2003) [@levinsohn_etal03], as well as their correction proposed by Ackerberg--Caves--Frazer 
 (2015) [@ackerberg_etal15]. The system GMM framework proposed by Wooldridge (2009) [@wooldridge_09] is also implemented in two slightly 
