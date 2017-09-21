@@ -2,7 +2,7 @@
 
 Stata and R packages for Production Function Estimation. 
 
-`prodest` in Stata ([Mollisi et al., 2017],(https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2916753)) is available on the SSC archive - type `ssc install prodest` to install the latest stable version.
+`prodest` in Stata ([Mollisi et al., 2017](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2916753)) is available on the SSC archive - type `ssc install prodest` to install the latest stable version.
 
 `prodest` in R ([Rovigatti, 2017](https://CRAN.R-project.org/package=prodest)) is available on the CRAN -  type `install.packages("prodest")` to install the latest stable version. 
 
