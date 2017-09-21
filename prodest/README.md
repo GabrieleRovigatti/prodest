@@ -22,16 +22,23 @@ Installation: To install the latest stable version of `prodest` in R type `insta
 Example: In R, type 
 
   require(prodest)
-  data(chilean) ## Chilean data on production.
-  #we fit a model with two free (skilled and unskilled), one state (capital) and one proxy variable (electricity)
-  #with two different optimizers
+  
+  data(chilean) # Chilean data on production.
+  
+  #we fit a model with two free (skilled and unskilled), one state (capital) and one proxy variable (electricity) with two different optimizers
+  
   LP.fit <- prodestLP(chilean$Y, fX = cbind(chilean$fX1, chilean$fX2), chilean$sX,
                         chilean$pX, chilean$idvar, chilean$timevar, seed = 154673)
+                        
   LP.fit.solnp <- prodestLP(chilean$Y, fX = cbind(chilean$fX1, chilean$fX2), chilean$sX,
                         chilean$pX, chilean$idvar, chilean$timevar, opt = 'solnp')
+                        
   #show results
+  
   summary(LP.fit)
+  
   summary(LP.fit.solnp)
 
   #show results in .tex tabular format
+  
   printProd(list(LP.fit, LP.fit.solnp))
