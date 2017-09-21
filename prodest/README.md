@@ -21,7 +21,7 @@ Installation: To install the latest stable version of `prodest` in R type `insta
 
 Example: In R, type 
 
-` require(prodest)
+  require(prodest)
   data(chilean) ## Chilean data on production.
   #we fit a model with two free (skilled and unskilled), one state (capital) and one proxy variable (electricity)
   #with two different optimizers
@@ -35,4 +35,3 @@ Example: In R, type
 
   #show results in .tex tabular format
   printProd(list(LP.fit, LP.fit.solnp))
- `
