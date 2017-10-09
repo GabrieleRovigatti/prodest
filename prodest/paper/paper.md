@@ -13,7 +13,7 @@ affiliations:
  - name: University of Chicago Booth School of Business
    index: 1
 date: 10 July 2017
-bibliography: prodest.bib
+bibliography: paper.bib
 ---
 
 # Summary
