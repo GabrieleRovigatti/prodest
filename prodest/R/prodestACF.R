@@ -85,7 +85,7 @@ finalACF <- function(ind, data, fnum, snum, cnum, opt, theta0, boot = FALSE){
   first.stage <- lm(data[,'Y', drop = FALSE] ~ data[, grepl('regvars', colnames(data)), drop = FALSE], na.action = na.exclude)
   phi <- fitted(first.stage) # generate the fitted values of the first stage
   if (is.null(theta0)) {
-    theta0 <- coef(first.stage)[2:(1+snum + fnum + cnum)] + rnorm((snum + fnum), 0, 0.01)
+    theta0 <- coef(first.stage)[2:(1 + snum + fnum + cnum)] + rnorm((snum + fnum), 0, 0.01)
   } # use the first stage + noise results as starting points in case the user did not specify other
   newtime <- data[,'timevar', drop = FALSE]
   rownames(phi) <- NULL
