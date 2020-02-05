@@ -18,8 +18,7 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, G=2, R = 20, cX = NULL, op
     stop(paste0('theta0 length (', length(theta0), ') is inconsistent with the number of parameters (', cnum + fnum + snum, ')'), sep = '')
   }
   mod <- poly(fX,sX,pX,degree=G)
-  mod <- mod[match(rownames(polyframe),rownames(mod)),] # replace NAs if there was any
-  regvars <- cbind(mod, fX^2, sX^2, pX^2) # generate a polynomial of the desired level
+  regvars <- mod[match(rownames(polyframe),rownames(mod)),] # replace NAs if there was any
   lag.sX = sX # generate sX lags
   for (i in 1:snum) {
     lag.sX[, i] = lagPanel(sX[, i], idvar = idvar, timevar = timevar)
