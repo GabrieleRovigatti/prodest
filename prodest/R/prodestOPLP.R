@@ -1,7 +1,7 @@
 ############ OLLEY-PAKES and LEVINSOHN-PETRIN ###############
 
 # function to estimate OP and LP model #
-prodestOP <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, opt = 'optim',
+prodestOP <- function(Y, fX, sX, pX, idvar, timevar, G = 2, R = 20, cX = NULL, opt = 'optim',
                       theta0 = NULL, seed = 123456, cluster = NULL, tol = 1e-100){
   set.seed(seed)
   Start = Sys.time() # start tracking time
@@ -15,9 +15,7 @@ prodestOP <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, opt = 'o
   fnum <- ncol(fX)
   if (!is.null(cX)) {cX <- checkM(cX); cnum <- ncol(cX)} else {cnum <- 0} # if is there any control, take it into account, else fix the number of controls to 0
   polyframe <- data.frame(cbind(sX,pX)) # vars to be used in polynomial approximation
-  mod <- model.matrix( ~ .^2 - 1, data = polyframe) # generate the polynomial elements - this drops NAs
-  mod <- mod[match(rownames(polyframe), rownames(mod)),] # replace NAs if there was any
-  regvars <- cbind(fX, cX, mod, sX^2, pX^2) # generate a polynomial of the desired level
+  regvars <- poly(fX,sX,pX,degree=G)
   lag.sX = sX # generate sX lags
   for (i in 1:snum) {
     lag.sX[, i] = lagPanel(sX[, i], idvar = idvar, timevar = timevar)
