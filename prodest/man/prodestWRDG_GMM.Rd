@@ -60,7 +60,7 @@
       \item \eqn{r_{1it} = y_{it} - alpha - w_{it}\beta - x_{it}\gamma - g(x_{it} , p_{it}) }
       \item \eqn{r_{2it} = y_{it} - alpha - w_{it}\beta - x_{it}\gamma - f[g(x_{it-1} , p_{it-1})]}
     }
-    where the unknown function \eqn{f(.)} is approximeted by a n-th order polynomial and \eqn{g(x_{it} , m_{it}) = \lambda_0 + c(x_{it} , m_{it})\lambda}. In particular, \eqn{g(x_{it} , m_{it})} is a linear combination of functions in \eqn{(x_{it} , m_{it})}
+    where the unknown function \eqn{f(.)} is approximated by a n-th order polynomial and \eqn{g(x_{it} , p_{it}) = \lambda_0 + c(x_{it} , p_{it})\lambda}. In particular, \eqn{g(x_{it} , p_{it})} is a linear combination of functions in \eqn{(x_{it} , p_{it})}
     and \eqn{c_{it}} are the addends of this linear combination. The residuals eqn{r_{it}} are used to set the moment conditions
     \itemize{
       \item \eqn{E(Z_{it}*r_{it}) =0}
@@ -68,8 +68,9 @@
     with the following set of instruments:
       \itemize{
         \item \eqn{Z1_{it} = (1, w_{it}, x_{it}, c_{it})}
-        \item \eqn{Z2_{it} = (w_{it-1}, c_{it}, c_{it})}
+        \item \eqn{Z2_{it} = (1, w_{it-1}, x_{it}, c_{it-1}, q_{it})}
       }
+    where \eqn{q_{it-1}} is a set of non-linear functions of c_{it-1}.
   }
 %%%%%%%%% VALUE %%%%%%%%%%%
   \value{
