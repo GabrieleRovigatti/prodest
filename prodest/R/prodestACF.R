@@ -1,7 +1,7 @@
 ############ ACKERBERG-CAVES-FRAZER ###############
 
 # function to estimate ACF model #
-prodestACF <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, opt = 'optim',
+prodestACF <- function(Y, fX, sX, pX, idvar, timevar, G=2, R = 20, cX = NULL, opt = 'optim',
                        theta0 = NULL, seed = 123456, cluster = NULL){
   set.seed(seed)
   Start = Sys.time() # start tracking time
@@ -17,8 +17,7 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, opt = '
   if (length(theta0) != cnum + fnum + snum & !is.null(theta0)){
     stop(paste0('theta0 length (', length(theta0), ') is inconsistent with the number of parameters (', cnum + fnum + snum, ')'), sep = '')
   }
-  polyframe <- data.frame(fX,sX,pX) # vars to be used in polynomial approximation
-  mod <- model.matrix( ~.^2-1, data = polyframe) # generate the polynomial elements - this drops NAs
+  mod <- poly(fX,sX,pX,degree=G)
   mod <- mod[match(rownames(polyframe),rownames(mod)),] # replace NAs if there was any
   regvars <- cbind(mod, fX^2, sX^2, pX^2) # generate a polynomial of the desired level
   lag.sX = sX # generate sX lags
