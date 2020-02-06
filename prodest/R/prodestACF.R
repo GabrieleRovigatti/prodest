@@ -17,7 +17,8 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, G=2, R = 20, cX = NULL, op
   if (length(theta0) != cnum + fnum + snum & !is.null(theta0)){
     stop(paste0('theta0 length (', length(theta0), ') is inconsistent with the number of parameters (', cnum + fnum + snum, ')'), sep = '')
   }
-  mod <- poly(fX,sX,pX,degree=G)
+  polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
+  mod <- cbind(fX,sX,pX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
   regvars <- mod[match(rownames(polyframe),rownames(mod)),] # replace NAs if there was any
   lag.sX = sX # generate sX lags
   for (i in 1:snum) {
