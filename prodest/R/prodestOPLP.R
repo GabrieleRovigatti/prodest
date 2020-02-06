@@ -14,7 +14,7 @@ prodestOP <- function(Y, fX, sX, pX, idvar, timevar, G = 2, orth = F, R = 20, cX
   snum <- ncol(sX) # find the number of input variables
   fnum <- ncol(fX)
   if (!is.null(cX)) {cX <- checkM(cX); cnum <- ncol(cX)} else {cnum <- 0} # if is there any control, take it into account, else fix the number of controls to 0
-  polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
+  polyframe <- poly(sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
   mod <- cbind(fX,sX,pX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
   regvars <- mod[match(rownames(polyframe),rownames(mod)),] # replace NAs if there was any
   lag.sX = sX # generate sX lags
