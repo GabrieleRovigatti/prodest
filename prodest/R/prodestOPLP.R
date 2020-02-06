@@ -1,7 +1,7 @@
 ############ OLLEY-PAKES and LEVINSOHN-PETRIN ###############
 
 # function to estimate OP and LP model #
-prodestOP <- function(Y, fX, sX, pX, idvar, timevar, G = 2, R = 20, cX = NULL, opt = 'optim',
+prodestOP <- function(Y, fX, sX, pX, idvar, timevar, G = 2, orth = F, R = 20, cX = NULL, opt = 'optim',
                       theta0 = NULL, seed = 123456, cluster = NULL, tol = 1e-100){
   set.seed(seed)
   Start = Sys.time() # start tracking time
@@ -14,8 +14,9 @@ prodestOP <- function(Y, fX, sX, pX, idvar, timevar, G = 2, R = 20, cX = NULL, o
   snum <- ncol(sX) # find the number of input variables
   fnum <- ncol(fX)
   if (!is.null(cX)) {cX <- checkM(cX); cnum <- ncol(cX)} else {cnum <- 0} # if is there any control, take it into account, else fix the number of controls to 0
-  polyframe <- data.frame(cbind(sX,pX)) # vars to be used in polynomial approximation
-  regvars <- poly(fX,sX,pX,degree=G)
+  polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
+  mod <- cbind(fX,sX,pX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
+  regvars <- mod[match(rownames(polyframe),rownames(mod)),] # replace NAs if there was any
   lag.sX = sX # generate sX lags
   for (i in 1:snum) {
     lag.sX[, i] = lagPanel(sX[, i], idvar = idvar, timevar = timevar)
