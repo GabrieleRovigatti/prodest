@@ -39,6 +39,13 @@
   \item{R      }{
     the number of block bootstrap repetitions to be performed in the standard error estimation. By default \code{R = 20}.}
   %
+  \item{G      }{
+    the degree of the first-stage polynomial in fX, sX and pX.}
+  %
+   \item{orth      }{
+    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth=F}. 
+    It is recommended to set orth to T if degree of polynomial is high.}
+  %
   \item{opt    }{
     a string with the optimization algorithm to be used during the estimation. By default \code{opt = 'optim'}.}
   %
