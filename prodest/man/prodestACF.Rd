@@ -10,7 +10,7 @@
 }
 %%%%%%%%% USAGE %%%%%%%%%%%
 \usage{
-  prodestACF(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL,
+  prodestACF(Y, fX, sX, pX, idvar, timevar, R = 20, G = 2, orth = F, cX = NULL,
             opt = 'optim', theta0 = NULL, seed = 123456, cluster = NULL)
 }
 %%%%%%%%% ARGUMENTS %%%%%%%%%%%
