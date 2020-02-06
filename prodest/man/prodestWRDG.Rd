@@ -36,7 +36,7 @@
   the number of block bootstrap repetitions to be performed in the standard error estimation. By default \code{R = 20}.}
   %
   \item{G      }{
-    the degree of the first-stage polynomial in fX, sX and pX.}
+    the degree of the polynomial for productivity in sX and pX.}
   %
   \item{orth   }{
     a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth=F}. 
