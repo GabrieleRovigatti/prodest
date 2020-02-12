@@ -1,7 +1,7 @@
 ############ ACKERBERG-CAVES-FRAZER (WITH DE LOECKER, GOLDBERG, PAVCNIK AND KHANDELWAL INPUT PRICE CONTROLS) ###############
 
 # function to estimate ACF model #
-prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none', dum = F, G = 2, A = 1, R = 20, orth = F, opt = 'optim',
+prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none', dum = F, G = 3, A = 3, R = 20, orth = F, opt = 'optim',
                        theta0 = NULL, seed = 123456, cluster = NULL){
   set.seed(seed)
   Start = Sys.time() # start tracking time
