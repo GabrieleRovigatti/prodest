@@ -10,7 +10,7 @@
 }
 %%%%%%%%% USAGE %%%%%%%%%%%
 \usage{
-  prodestACF(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL,
+  prodestACF(Y, fX, sX, pX, idvar, timevar, R = 20, G = 2, orth = F, cX = NULL,
             opt = 'optim', theta0 = NULL, seed = 123456, cluster = NULL)
 }
 %%%%%%%%% ARGUMENTS %%%%%%%%%%%
@@ -38,6 +38,13 @@
   %
   \item{R      }{
     the number of block bootstrap repetitions to be performed in the standard error estimation. By default \code{R = 20}.}
+  %
+  \item{G      }{
+    the degree of the first-stage polynomial in fX, sX and pX.}
+  %
+   \item{orth      }{
+    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth=F}. 
+    It is recommended to set orth to T if degree of polynomial is high.}
   %
   \item{opt    }{
     a string with the optimization algorithm to be used during the estimation. By default \code{opt = 'optim'}.}

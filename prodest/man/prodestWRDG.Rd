@@ -7,7 +7,7 @@
   The \code{prodestWRDG()} function accepts at least 6 objects (id, time, output, free, state and proxy variables), and returns a \code{prod} object of class \code{S4} with three elements: (i) a list of model-related objects, (ii) a list with the data used in the estimation and estimated vectors of first-stage residuals, and (iii) a list with the estimated parameters and their bootstrapped standard errors.
 }
 \usage{
-  prodestWRDG(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, seed = 123456,
+  prodestWRDG(Y, fX, sX, pX, idvar, timevar, R = 20, G = 2, orth = F, cX = NULL, seed = 123456,
                 tol = 1e-100, theta0 = NULL, cluster = NULL)
 }
 \arguments{
@@ -34,6 +34,13 @@
   %
   \item{R      }{
   the number of block bootstrap repetitions to be performed in the standard error estimation. By default \code{R = 20}.}
+  %
+  \item{G      }{
+    the degree of the polynomial for productivity in sX and pX.}
+  %
+  \item{orth   }{
+    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth=F}. 
+    It is recommended to set orth to T if degree of polynomial is high.}
   %
   \item{theta0 }{
   a vector with the second stage optimization starting points. By default \code{theta0 = NULL} and the optimization is run starting from the first stage estimated parameters + \eqn{N(\mu=0,\sigma=0.01)} noise.}

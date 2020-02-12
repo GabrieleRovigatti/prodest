@@ -7,7 +7,7 @@
   The \code{prodestWRDG_GMM()} function accepts at least 6 objects (id, time, output, free, state and proxy variables), and returns a \code{prod} object of class \code{S3} with three elements: (i) a list of model-related objects, (ii) a list with the data used in the estimation and estimated vectors of first-stage residuals, and (iii) a list with the estimated parameters and their bootstrapped standard errors.
 }
 \usage{
-  prodestWRDG_GMM(Y, fX, sX, pX, idvar, timevar, cX = NULL, seed = 123456, tol = 1e-100)
+  prodestWRDG_GMM(Y, fX, sX, pX, idvar, timevar, G = 2, orth = F, cX = NULL, seed = 123456, tol = 1e-100)
 }
 \arguments{
   \item{Y      }{
@@ -24,6 +24,13 @@
   %
   \item{cX     }{
     the vector/matrix/dataframe of control variables. By default \code{cX= NULL}.}
+  %
+   \item{G     }{
+    the degree of the polynomial for productivity in sX and pX.}
+  %
+   \item{orth      }{
+    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth=F}. 
+    It is recommended to set orth to T if degree of polynomial is high.}
   %
   \item{idvar  }{
     the vector/matrix/dataframe identifying individual panels.}
@@ -60,7 +67,7 @@
       \item \eqn{r_{1it} = y_{it} - alpha - w_{it}\beta - x_{it}\gamma - g(x_{it} , p_{it}) }
       \item \eqn{r_{2it} = y_{it} - alpha - w_{it}\beta - x_{it}\gamma - f[g(x_{it-1} , p_{it-1})]}
     }
-    where the unknown function \eqn{f(.)} is approximeted by a n-th order polynomial and \eqn{g(x_{it} , m_{it}) = \lambda_0 + c(x_{it} , m_{it})\lambda}. In particular, \eqn{g(x_{it} , m_{it})} is a linear combination of functions in \eqn{(x_{it} , m_{it})}
+    where the unknown function \eqn{f(.)} is approximated by a n-th order polynomial and \eqn{g(x_{it} , p_{it}) = \lambda_0 + c(x_{it} , p_{it})\lambda}. In particular, \eqn{g(x_{it} , p_{it})} is a linear combination of functions in \eqn{(x_{it} , p_{it})}
     and \eqn{c_{it}} are the addends of this linear combination. The residuals eqn{r_{it}} are used to set the moment conditions
     \itemize{
       \item \eqn{E(Z_{it}*r_{it}) =0}
@@ -68,8 +75,9 @@
     with the following set of instruments:
       \itemize{
         \item \eqn{Z1_{it} = (1, w_{it}, x_{it}, c_{it})}
-        \item \eqn{Z2_{it} = (w_{it-1}, c_{it}, c_{it})}
+        \item \eqn{Z2_{it} = (1, w_{it-1}, x_{it}, c_{it-1}, q_{it})}
       }
+    where \eqn{q_{it-1}} is a set of non-linear functions of c_{it-1}.
   }
 %%%%%%%%% VALUE %%%%%%%%%%%
   \value{

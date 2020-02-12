@@ -1,7 +1,7 @@
 ############ WOOLDRIDGE ###############
 
 # function to estimate Wooldridge #
-prodestWRDG <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, seed = 123456,
+prodestWRDG <- function(Y, fX, sX, pX, idvar, timevar, G = 2, orth = F, R = 20, cX = NULL, seed = 123456,
                         tol = 1e-100, theta0 = NULL, cluster = NULL){
   set.seed(seed)
   Start = Sys.time() # start tracking time
@@ -19,8 +19,8 @@ prodestWRDG <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, seed =
   for (i in 1:fnum) {
     lag.fX[, i] = lagPanel(fX[, i], idvar = idvar, timevar = timevar)
   }
-  polyframe <- data.frame(sX,pX) # vars to be used in polynomial approximation
-  regvars <- cbind(model.matrix( ~.^2-1, data = polyframe),sX^2,pX^2) # generate a polynomial of the desired level
+  regvars <- poly(sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
+  regvars <- cbind(sX,pX,regvars) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
   lagregvars <- regvars
   for (i in 1:dim(regvars)[2]) {
     lagregvars[, i] <- lagPanel(idvar = idvar, timevar = timevar, regvars[ ,i])
