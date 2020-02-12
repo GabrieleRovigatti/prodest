@@ -1,7 +1,7 @@
 ############ OLLEY-PAKES and LEVINSOHN-PETRIN ###############
 
 # function to estimate OP and LP model #
-prodestOP <- function(Y, fX, sX, pX, idvar, timevar, G = 2, orth = F, R = 20, cX = NULL, opt = 'optim',
+prodestOP <- function(Y, fX, sX, pX, idvar, timevar, G = 3, A = 3, orth = F, R = 20, cX = NULL, opt = 'optim',
                       theta0 = NULL, seed = 123456, cluster = NULL, tol = 1e-100){
   set.seed(seed)
   Start = Sys.time() # start tracking time
@@ -204,7 +204,8 @@ finalOPLP <- function(ind, data, fnum, snum, cnum, opt, theta0, boot, tol){
 gOPLP <- function(vtheta, mX, mlX, vphi, vlag.phi, vres, stol){
   Omega <- vphi - mX %*% vtheta
   Omega_lag <- vlag.phi - mlX %*% vtheta
-  Omega_lag_pol <- cbind(1, Omega_lag, Omega_lag^2, Omega_lag^3)
+  Omega_lag_pol <- poly(Omega_lag,degree=A,raw=T) # create polynomial in omega for given degree
+  Omega_lag_pol <- cbind(1, Omega_lag_pol)
   g_b <- solve(crossprod(Omega_lag_pol), tol = stol) %*% t(Omega_lag_pol) %*% Omega
   XI <- vres - (mX %*% vtheta) - (Omega_lag_pol %*% g_b)
   crit <- crossprod(XI)
