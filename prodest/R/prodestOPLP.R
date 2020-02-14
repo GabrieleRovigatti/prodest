@@ -29,7 +29,7 @@ prodestOP <- function(Y, fX, sX, pX, idvar, timevar, G = 3, A = 3, orth = F, R =
                                  timevar = timevar, regvars = regvars)))
   }
   betas <- finalOPLP(ind = TRUE, data = data, fnum = fnum, snum = snum, cnum = cnum, opt = opt,
-                     theta0 = theta0, boot = FALSE, tol = tol) # generate the list of estimated betas
+                     theta0 = theta0, boot = FALSE, tol = tol, A = A) # generate the list of estimated betas
   boot.indices <- block.boot.resample(idvar, R) # generate a list: every element has different length (same IDs, different time occasions) and is a vector of new indices, whose rownames are the new IDs
   if (is.null(cluster)){
     nCores = NULL
@@ -91,7 +91,7 @@ prodestLP <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, opt = 'o
                                  timevar = timevar, regvars = regvars)))
   }
   betas <- finalOPLP(ind = TRUE, data = data, fnum = fnum, snum = snum, cnum = cnum, opt = opt,
-                     theta0 = theta0, boot = FALSE, tol = tol) # generate the list of estimated betas
+                     theta0 = theta0, boot = FALSE, tol = tol, A = A) # generate the list of estimated betas
   boot.indices <- block.boot.resample(idvar, R) # generate a list: every element has different length (same IDs, different time occasions) and is a vector of new indices, whose rownames are the new IDs
   if (is.null(cluster)){
     nCores = NULL
@@ -127,7 +127,7 @@ prodestLP <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, opt = 'o
 # end of prodestLP #
 
 # function to estimate and to bootstrap OP / LP #
-finalOPLP <- function(ind, data, fnum, snum, cnum, opt, theta0, boot, tol){
+finalOPLP <- function(ind, data, fnum, snum, cnum, opt, theta0, boot, tol, A){
   if (sum(as.numeric(ind)) == length(ind)){ # if the ind variable is not always TRUE
     newid <- data[ind, 'idvar', drop = FALSE]
   } else {
@@ -158,7 +158,8 @@ finalOPLP <- function(ind, data, fnum, snum, cnum, opt, theta0, boot, tol){
   tmp.data <- model.frame(state ~ lag.sX + phi + lag.phi + res)
   if (opt == 'optim'){
     try.state <- try(optim(theta0, gOPLP, method = "BFGS", mX = tmp.data$state, mlX = tmp.data$lag.sX,
-                           vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi, vres = tmp.data$res, stol = tol), silent = TRUE)
+                           vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi, vres = tmp.data$res, stol = tol, A = A), 
+                           silent = TRUE)
     if (!inherits(try.state, "try-error")) {
       beta.state <- try.state$par
       opt.outcome <- try.state
@@ -170,7 +171,7 @@ finalOPLP <- function(ind, data, fnum, snum, cnum, opt, theta0, boot, tol){
     try.state <- try(DEoptim(fn = gOPLP, lower = c(theta0), upper = rep.int(1,length(theta0)),
                              mX = tmp.data$state, mlX = tmp.data$lag.sX,
                              vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi,
-                             vres =  tmp.data$res, stol = tol, control = DEoptim.control(trace = FALSE)),
+                             vres =  tmp.data$res, stol = tol, A = A, control = DEoptim.control(trace = FALSE)),
                      silent = TRUE)
     if (!inherits(try.state, "try-error")) {
       beta.state <- try.state$optim$bestmem
@@ -182,7 +183,7 @@ finalOPLP <- function(ind, data, fnum, snum, cnum, opt, theta0, boot, tol){
   } else if (opt == 'solnp') {
     try.state <- try(solnp(theta0, gOPLP, mX = tmp.data$state, mlX = tmp.data$lag.sX,
                            vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi,
-                           vres =  tmp.data$res, stol = tol, control = list(trace = FALSE)), silent = TRUE)
+                           vres =  tmp.data$res, stol = tol, A = A, control = list(trace = FALSE)), silent = TRUE)
     if (!inherits(try.state, "try-error")) {
       beta.state <- try.state$pars
       opt.outcome <- try.state
@@ -201,10 +202,10 @@ finalOPLP <- function(ind, data, fnum, snum, cnum, opt, theta0, boot, tol){
 # end of OP / LP final function #
 
 # function to run the GMM estimation for OP and LP #
-gOPLP <- function(vtheta, mX, mlX, vphi, vlag.phi, vres, stol){
+gOPLP <- function(vtheta, mX, mlX, vphi, vlag.phi, vres, stol, A){
   Omega <- vphi - mX %*% vtheta
   Omega_lag <- vlag.phi - mlX %*% vtheta
-  Omega_lag_pol <- poly(Omega_lag,degree=A,raw=T) # create polynomial in omega for given degree
+  Omega_lag_pol <- poly(Omega_lag,degree = A,raw = T) # create polynomial in omega for given degree
   Omega_lag_pol <- cbind(1, Omega_lag_pol)
   g_b <- solve(crossprod(Omega_lag_pol), tol = stol) %*% t(Omega_lag_pol) %*% Omega
   XI <- vres - (mX %*% vtheta) - (Omega_lag_pol %*% g_b)
