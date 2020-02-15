@@ -114,7 +114,7 @@ finalACF <- function(ind, data, fnum, snum, znum, opt, theta0, A, boot = FALSE){
     try.out <- try(optim(theta0, gACF, method = "BFGS", mZ = tmp.data$Z, mW = W, mX = tmp.data$X,
                          mlX = tmp.data$lX,
                          vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi, A = A,
-                         control = list(maxit = 1000) # to 'guarantee' 2nd stage convergence
+                         control = list(maxit = 1500) # to 'guarantee' 2nd stage convergence
                          ), silent = TRUE)
     if (!inherits(try.out, "try-error")) {
       betas <- try.out$par
