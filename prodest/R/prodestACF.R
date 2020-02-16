@@ -18,7 +18,7 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none
     stop(paste0('theta0 length (', length(theta0), ') is inconsistent with the number of parameters (', znum + fnum + snum, ')'), sep = '')
   }
   if (!is.null(zX)) {
-    polyframe <- poly(fX,sX,zX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
+    polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
     regvars <- cbind(fX,sX,zX,pX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
   } else { 
     polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) 
