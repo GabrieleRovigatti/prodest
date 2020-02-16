@@ -1,7 +1,7 @@
 ############ WOOLDRIDGE ###############
 
 # function to estimate Wooldridge #
-prodestWRDG_GMM <- function(Y, fX, sX, pX, idvar, timevar, G = 2, orth = F, cX = NULL, seed = 123456, tol = 1e-100){
+prodestWRDG_GMM <- function(Y, fX, sX, pX, idvar, timevar, G = 3, orth = F, cX = NULL, seed = 123456, tol = 1e-100){
   set.seed(seed)
   Start = Sys.time() # start tracking time
   Y <- checkM(Y) # change all input to matrix

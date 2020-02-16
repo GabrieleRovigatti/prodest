@@ -7,7 +7,7 @@
 The \code{prodestOP()} function accepts at least 6 objects (id, time, output, free, state and proxy variables), and returns a \code{prod} object of class \code{S4} with three elements: (i) a list of model-related objects, (ii) a list with the data used in the estimation and estimated vectors of first-stage residuals, and (iii) a list with the estimated parameters and their bootstrapped standard errors .
 }
 \usage{
-  prodestOP(Y, fX, sX, pX, idvar, timevar, R = 20, G = 20, orth = F, cX = NULL,
+  prodestOP(Y, fX, sX, pX, idvar, timevar, R = 20, G = 3, orth = F, cX = NULL,
             opt = 'optim', theta0 = NULL, seed = 123456, cluster = NULL, tol = 1e-100)
 }
 \arguments{
@@ -36,10 +36,10 @@ The \code{prodestOP()} function accepts at least 6 objects (id, time, output, fr
   the number of block bootstrap repetitions to be performed in the standard error estimation. By default \code{R = 20}.}
   %
   \item{G      }{
-    the degree of the first-stage polynomial in fX, sX and pX.}
+    the degree of the first-stage polynomial in fX, sX and pX. By default, \code{G = 3}.}
   %
   \item{orth      }{
-    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth=F}. 
+    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth = F}. 
     It is recommended to set orth to T if degree of polynomial is high.}
   %
   \item{opt    }{

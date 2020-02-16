@@ -1,7 +1,7 @@
 ############ ACKERBERG-CAVES-FRAZER (WITH DE LOECKER, GOLDBERG, PAVCNIK AND KHANDELWAL INPUT PRICE CONTROLS) ###############
 
 # function to estimate ACF model #
-prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none', dum = F, G = 2, A = 1, R = 20, orth = F, opt = 'optim',
+prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none', dum = F, G = 3, A = 3, R = 20, orth = F, opt = 'optim',
                        theta0 = NULL, seed = 123456, cluster = NULL){
   set.seed(seed)
   Start = Sys.time() # start tracking time
@@ -18,7 +18,7 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none
     stop(paste0('theta0 length (', length(theta0), ') is inconsistent with the number of parameters (', znum + fnum + snum, ')'), sep = '')
   }
   if (!is.null(zX)) {
-    polyframe <- poly(fX,sX,zX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
+    polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
     regvars <- cbind(fX,sX,zX,pX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
   } else { 
     polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) 
@@ -51,7 +51,7 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none
     data <- as.matrix(data.frame(Y = Y, idvar = idvar, timevar = timevar, Z = data.frame(lag.fX,sX),
                                  Xt = data.frame(fX,sX), lX = data.frame(lag.fX,lag.sX), regvars = regvars))
   }
-  betas <- finalACF(ind = TRUE, data = data, fnum = fnum, snum = snum, znum = znum, opt = opt, theta0 = theta0)
+  betas <- finalACF(ind = TRUE, data = data, fnum = fnum, snum = snum, znum = znum, opt = opt, theta0 = theta0, A=A)
   if (betas$opt.outcome$convergence != 0){
     warning('Second Stage convergence not achieved')
   }
@@ -88,7 +88,7 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none
 # end of prodestACF #
 
 # function to estimate and bootstrap ACF #
-finalACF <- function(ind, data, fnum, snum, znum, opt, theta0, boot = FALSE){
+finalACF <- function(ind, data, fnum, snum, znum, opt, theta0, A, boot = FALSE){
   if (sum(as.numeric(ind)) == length(ind)){ # if the ind variable is not always TRUE
     newid <- data[ind, 'idvar', drop = FALSE]
   } else {
@@ -113,8 +113,8 @@ finalACF <- function(ind, data, fnum, snum, znum, opt, theta0, boot = FALSE){
   if (opt == 'optim'){
     try.out <- try(optim(theta0, gACF, method = "BFGS", mZ = tmp.data$Z, mW = W, mX = tmp.data$X,
                          mlX = tmp.data$lX,
-                         vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi,
-                         control = list(maxit = 1000) # to 'guarantee' 2nd stage convergence
+                         vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi, A = A,
+                         control = list(maxit = 1500) # to 'guarantee' 2nd stage convergence
                          ), silent = TRUE)
     if (!inherits(try.out, "try-error")) {
       betas <- try.out$par
@@ -126,7 +126,7 @@ finalACF <- function(ind, data, fnum, snum, znum, opt, theta0, boot = FALSE){
   } else if (opt == 'DEoptim'){
     try.out <- try(DEoptim(gACF, lower = theta0, upper = rep.int(1,length(theta0)), mZ = tmp.data$Z,
                            mW = W, mX = tmp.data$X, mlX = tmp.data$lX,
-                           vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi,
+                           vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi, A = A,
                            control = DEoptim.control(trace = FALSE)), silent = TRUE)
     if (!inherits(try.out, "try-error")) {
       betas <- try.out$optim$bestmem
@@ -137,7 +137,7 @@ finalACF <- function(ind, data, fnum, snum, znum, opt, theta0, boot = FALSE){
     } # error handling: if the optimization fails return missing values
   } else if (opt == 'solnp'){
     try.out <- try(solnp(theta0, gACF, mZ = tmp.data$Z, mW = W, mX = tmp.data$X, mlX = tmp.data$lX,
-                         vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi,
+                         vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi, A = A,
                          control = list(trace = FALSE)), silent = TRUE)
     if (!inherits(try.out, "try-error")) {
       betas <- try.out$pars
@@ -156,7 +156,7 @@ finalACF <- function(ind, data, fnum, snum, znum, opt, theta0, boot = FALSE){
 # end of ACF final function #
 
 # function to run the GMM estimation for ACF #
-gACF <- function(theta, mZ, mW, mX, mlX, vphi, vlag.phi){
+gACF <- function(theta, mZ, mW, mX, mlX, vphi, vlag.phi, A){
   Omega <- vphi - mX %*% theta
   Omega_lag <- vlag.phi - mlX %*% theta
   Omega_lag_pol <- poly(Omega_lag,degree=A,raw=T) # create polynomial in omega for given degree

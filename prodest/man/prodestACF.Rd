@@ -10,8 +10,8 @@
 }
 %%%%%%%%% USAGE %%%%%%%%%%%
 \usage{
-  prodestACF(Y, fX, sX, pX, idvar, timevar, R = 20, G = 2, orth = F, cX = NULL,
-            opt = 'optim', theta0 = NULL, seed = 123456, cluster = NULL)
+  prodestACF(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = c('none','fs','2s'), dum = F, G = 3, A = 3, R = 20, orth = F, opt = 'optim',
+                       theta0 = NULL, seed = 123456, cluster = NULL)
 }
 %%%%%%%%% ARGUMENTS %%%%%%%%%%%
 \arguments{
@@ -27,23 +27,37 @@
   \item{pX    }{
     the vector/matrix/dataframe of log proxy variables.}
   %
-  \item{cX     }{
-    the vector/matrix/dataframe of control variables. By default \code{cX= NULL}.}
-  %
   \item{idvar  }{
     the vector/matrix/dataframe identifying individual panels.}
   %
   \item{timevar}{
     the vector/matrix/dataframe identifying time.}
   %
-  \item{R      }{
-    the number of block bootstrap repetitions to be performed in the standard error estimation. By default \code{R = 20}.}
+  \item{zX    }{
+    the vector/matrix/dataframe of (input price) control variables.}
+  %
+  \item{control    }{
+    the way in which the control variables should be included. By default \code{control = 'none'}. 
+    Specifying \code{control = 'fs'} only includes controls in the first-stage polynomial, as in De Loecker and Warzynski (2012).
+    Specifying \code{control = 'fs'} includes controls in both first and second stage, as in De Loecker, Goldberg, Khandelwal and 
+    Pavcnik (2016). Note that this is not desirable when estimating a revenue gross ouput production function, as in 
+    that case not controlling for input prices has the coincidental benefit that the input price bias partially cancels out 
+    the output price bias.}
+  %
+  \item{dum    }{
+  whether time dummies should be included in the first stage. By default \code{dum = F}.}
   %
   \item{G      }{
-    the degree of the first-stage polynomial in fX, sX and pX.}
+    the degree of the first-stage polynomial in fX, sX and pX. By default \code{G = 3}.}
+  %
+  \item{A      }{
+    the degree of the polynomial for the Markov productivity process. By default \code{A = 3}.}
+  %
+   \item{R      }{
+    the number of block bootstrap repetitions to be performed in the standard error estimation. By default \code{R = 20}.}
   %
    \item{orth      }{
-    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth=F}. 
+    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth = F}. 
     It is recommended to set orth to T if degree of polynomial is high.}
   %
   \item{opt    }{
@@ -132,6 +146,12 @@
     Ackerberg, D., Caves, K. and Frazer, G. (2015).
     "Identification properties of recent production function estimators."
     Econometrica, 83(6), 2411-2451.
+    De Loecker, J., Goldberg, P. K., Khandelwal, A. K., & Pavcnik, N. (2016). 
+    "Prices, markups, and trade reform." 
+    Econometrica, 84(2), 445-510.
+    De Loecker, J., & Warzynski, F. (2012). 
+    "Markups and firm-level export status." 
+    American Economic Review, 102(6), 2437-71.
   }
 %%%%%%%%% EXAMPLES %%%%%%%%%%%
   \examples{

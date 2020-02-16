@@ -7,7 +7,7 @@
   The \code{prodestWRDG_GMM()} function accepts at least 6 objects (id, time, output, free, state and proxy variables), and returns a \code{prod} object of class \code{S3} with three elements: (i) a list of model-related objects, (ii) a list with the data used in the estimation and estimated vectors of first-stage residuals, and (iii) a list with the estimated parameters and their bootstrapped standard errors.
 }
 \usage{
-  prodestWRDG_GMM(Y, fX, sX, pX, idvar, timevar, G = 2, orth = F, cX = NULL, seed = 123456, tol = 1e-100)
+  prodestWRDG_GMM(Y, fX, sX, pX, idvar, timevar, G = 3, orth = F, cX = NULL, seed = 123456, tol = 1e-100)
 }
 \arguments{
   \item{Y      }{
@@ -26,10 +26,10 @@
     the vector/matrix/dataframe of control variables. By default \code{cX= NULL}.}
   %
    \item{G     }{
-    the degree of the polynomial for productivity in sX and pX.}
+    the degree of the polynomial for productivity in sX and pX. By default, \code{G = 3}.}
   %
    \item{orth      }{
-    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth=F}. 
+    a Boolean that determines whether first-stage polynomial should be orthogonal or raw. By default, \code{orth = F}. 
     It is recommended to set orth to T if degree of polynomial is high.}
   %
   \item{idvar  }{

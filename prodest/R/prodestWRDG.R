@@ -1,7 +1,7 @@
 ############ WOOLDRIDGE ###############
 
 # function to estimate Wooldridge #
-prodestWRDG <- function(Y, fX, sX, pX, idvar, timevar, G = 2, orth = F, R = 20, cX = NULL, seed = 123456,
+prodestWRDG <- function(Y, fX, sX, pX, idvar, timevar, G = 3, orth = F, R = 20, cX = NULL, seed = 123456,
                         tol = 1e-100, theta0 = NULL, cluster = NULL){
   set.seed(seed)
   Start = Sys.time() # start tracking time
