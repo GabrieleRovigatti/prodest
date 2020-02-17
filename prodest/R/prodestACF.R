@@ -19,7 +19,7 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none
   }
   if (!is.null(zX)) {
     polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
-    regvars <- cbind(fX,sX,zX,pX,fX*zX,sX*zX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
+    regvars <- cbind(fX,sX,zX,pX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
   } else { 
     polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) 
     regvars <- cbind(fX,sX,pX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
