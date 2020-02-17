@@ -160,6 +160,7 @@ gACF <- function(theta, mZ, mW, mX, mlX, vphi, vlag.phi, A){
   Omega <- vphi - mX %*% theta
   Omega_lag <- vlag.phi - mlX %*% theta
   Omega_lag_pol <- poly(Omega_lag,degree=A,raw=T) # create polynomial in omega for given degree
+  Omega_lag_pol <- cbind(1, Omega_lag_pol)
   g_b <- solve(crossprod(Omega_lag_pol)) %*% t(Omega_lag_pol) %*% Omega
   XI <- Omega - Omega_lag_pol %*% g_b
   crit <- t(crossprod(mZ, XI)) %*% mW %*% (crossprod(mZ, XI))
