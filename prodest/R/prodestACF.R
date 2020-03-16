@@ -60,12 +60,12 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none
     nCores = NULL
     boot.betas <- matrix(unlist(
       lapply(boot.indices, finalACF, data = data, fnum = fnum, snum = snum, znum = znum, opt = opt,
-             theta0 = theta0, boot = TRUE)), ncol = fnum + snum + znum, byrow = TRUE) # use the indices and pass them to the final function (reshape the data)
+             theta0 = theta0, A = A, boot = TRUE)), ncol = fnum + snum + znum, byrow = TRUE) # use the indices and pass them to the final function (reshape the data)
   } else {
     nCores = length(cluster)
     clusterEvalQ(cl = cluster, library(prodest))
     boot.betas <- matrix( unlist( parLapply(cl = cluster, boot.indices, finalACF, data = data, fnum = fnum, snum = snum,
-                                            znum = znum, opt = opt, theta0 = theta0, boot = TRUE) ),
+                                            znum = znum, opt = opt, theta0 = theta0, A = A, boot = TRUE) ),
                           ncol = fnum + snum + znum, byrow = TRUE ) # use the indices and pass them to the final function (reshape the data)
   }
   boot.errors <- apply(boot.betas, 2, sd, na.rm = TRUE) # calculate standard deviations
