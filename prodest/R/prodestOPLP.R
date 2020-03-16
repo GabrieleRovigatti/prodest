@@ -98,15 +98,15 @@ prodestLP <- function(Y, fX, sX, pX, idvar, timevar, R = 20, cX = NULL, opt = 'o
     boot.betas <- matrix(NA, R, (fnum + snum + cnum))
     for (i in 1:R){
       boot.betas[i,] <- finalOPLP(ind = boot.indices[[i]], data = data, fnum = fnum, snum = snum, cnum = cnum,
-                                  opt = opt, theta0 = theta0, boot = TRUE, tol = tol)
+                                  opt = opt, theta0 = theta0, A = A, boot = TRUE, tol = tol)
     }
   } else { # set up the cluster: send the lag Panel and the data.table libraries to clusters
     nCores = length(cluster)
     clusterEvalQ(cl = cluster, library(prodest))
     boot.betas <- matrix(unlist(parLapply(cl = cluster, boot.indices, finalOPLP, data = data,
                                           fnum = fnum, snum = snum, cnum = cnum,
-                                          opt = opt, theta0 = theta0, boot = TRUE, tol = tol)), ncol = fnum + snum + cnum,
-                         byrow = TRUE) # use the indices and pass them to the final function (reshape the data)
+                                          opt = opt, theta0 = theta0, A = A, boot = TRUE, tol = tol)), 
+                         ncol = fnum + snum + cnum, byrow = TRUE) # use the indices and pass them to the final function (reshape the data)
   }
   boot.errors <- apply(boot.betas, 2, sd, na.rm = TRUE) # calculate standard deviations
   res.names <- c(colnames(fX, do.NULL = FALSE, prefix = 'fX'),
