@@ -4,6 +4,17 @@ The module is available on SSC (ssc install markupest)
 In case of bug reporting, issues, malfunctioning please send an email to:
         gabriele.rovigatti@gmail.com
         
+/adofiles:
+
+_ markupest.ado - main module adofile. 
+
+_ markupest.sthlp - markupest helpfile. 
+
+_ prodest_m.ado - custom (i.e., faster but partial) version of prodest.ado to be run with markupest only
+
+_ prodest_p_m.ado - custom version of prodest predict to be run with markupest only
+
+        
 /data:
 
 _ klemscombinedbymeasure.csv - it is the BLS-KLEMS data (combined Sectors and Industry KLEMS Multifactor Productivity Tables) used in Hall (2018) 
