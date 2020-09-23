@@ -18,7 +18,7 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none
     stop(paste0('theta0 length (', length(theta0), ') is inconsistent with the number of parameters (', znum + fnum + snum, ')'), sep = '')
   }
   if (!is.null(zX)) {
-    polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
+    polyframe <- poly(fX,sX,zX,pX,degree=G,raw=!orth) # create (orthogonal / raw) polynomial of degree G
     regvars <- cbind(fX,sX,zX,pX,polyframe) # to make sure 1st degree variables come first (lm will drop the other ones from 1st-stage reg)
   } else { 
     polyframe <- poly(fX,sX,pX,degree=G,raw=!orth) 
@@ -60,12 +60,12 @@ prodestACF <- function(Y, fX, sX, pX, idvar, timevar, zX = NULL, control = 'none
     nCores = NULL
     boot.betas <- matrix(unlist(
       lapply(boot.indices, finalACF, data = data, fnum = fnum, snum = snum, znum = znum, opt = opt,
-             theta0 = theta0, boot = TRUE)), ncol = fnum + snum + znum, byrow = TRUE) # use the indices and pass them to the final function (reshape the data)
+             theta0 = theta0, A = A, boot = TRUE)), ncol = fnum + snum + znum, byrow = TRUE) # use the indices and pass them to the final function (reshape the data)
   } else {
     nCores = length(cluster)
     clusterEvalQ(cl = cluster, library(prodest))
     boot.betas <- matrix( unlist( parLapply(cl = cluster, boot.indices, finalACF, data = data, fnum = fnum, snum = snum,
-                                            znum = znum, opt = opt, theta0 = theta0, boot = TRUE) ),
+                                            znum = znum, opt = opt, theta0 = theta0, A = A, boot = TRUE) ),
                           ncol = fnum + snum + znum, byrow = TRUE ) # use the indices and pass them to the final function (reshape the data)
   }
   boot.errors <- apply(boot.betas, 2, sd, na.rm = TRUE) # calculate standard deviations
@@ -114,7 +114,7 @@ finalACF <- function(ind, data, fnum, snum, znum, opt, theta0, A, boot = FALSE){
     try.out <- try(optim(theta0, gACF, method = "BFGS", mZ = tmp.data$Z, mW = W, mX = tmp.data$X,
                          mlX = tmp.data$lX,
                          vphi = tmp.data$phi, vlag.phi = tmp.data$lag.phi, A = A,
-                         control = list(maxit = 1500) # to 'guarantee' 2nd stage convergence
+                         control = list(maxit = 2000) # to 'guarantee' 2nd stage convergence
                          ), silent = TRUE)
     if (!inherits(try.out, "try-error")) {
       betas <- try.out$par
